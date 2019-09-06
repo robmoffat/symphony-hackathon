@@ -1,0 +1,14 @@
+{
+  "applications": [
+    {
+      "type": "sandbox",
+      "id": "multimeter",
+      "name": "Symphony Multimeter",
+      "description": "Performance and Connection Analysis Tool",
+      "publisher": "Symphony Platform Solutions",
+      "url": "https://localhost:4000/controller.html",
+      "icon": "https://localhost:4000/img/noun_Multimeter_1845862.png",
+      "domain": "localhost"
+    }
+  ]
+}

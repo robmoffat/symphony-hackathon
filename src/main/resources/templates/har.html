@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="bootstrap-4.3.1-dist/css/bootstrap.min.css" />
+<link href="/table/tabulator.min.css" rel="stylesheet">
+<link href="/multimeter/multimeter.css" rel="stylesheet">
+<script type="text/javascript" src="/symphony/symphony-api.js" charset="utf-8"></script>
+<script type="text/javascript" src="/table/tabulator.min.js"></script>
+<script type="text/javascript" src="/json/oboe-browser.js"></script>
+<script type="text/javascript" src="/table/moment.js"></script>
+ 
+<script type="text/javascript" th:inline="javascript">
+
+	// set the data from the template. 
+	var tableData = /*[[${data}]]*/ [];
+
+</script>
+
+<script type="text/javascript" src="/multimeter/multimeter.js"></script>
+<script type="text/javascript" src="/js/app.js" charset="utf-8"></script>
+</head>
+<body class="bg-light">
+
+	<div class="box">
+		<div class="box-row header">
+			<div class="container-fluid" style="padding-top: 15px;">
+				<div class="row">
+				
+					<div class="col col-12">
+						<div class="input-group input-group mb-3">
+							<div class="input-group-prepend">
+								<a class="input-group-text" id="help" href="harhelp.html">Help</a>
+							</div>
+							<p class="form-control form-control-placeholder">HAR Analyser 
+								<span class="spinner-border" role="status" id="spinner" style="visibility: hidden; float: right; height: 20px; width: 20px;">
+									<span class="sr-only"> Loading...</span>
+								</span>
+							</p>
+							<div class="input-group-append">
+								<a class="input-group-text" id="about" href="harhelp.html">About
+								</a>
+							</div>
+						</div>
+					</div>
+				
+				</div>
+
+				<div class="row">
+
+					<div class="col col-12 col-md-6">
+						<div class="input-group mb-3">
+							<div class="custom-file">
+								<input type="file" class="custom-file-input" id="file" name="file" aria-describedby="inputGroupFileAddon01"> <label
+									class="custom-file-label" for="inputGroupFile01">Choose file</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="col col-12 col-md-6 ">
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="basic-addon2">URL Filter:</span>
+							</div>
+							<input id="textfilter" name="filter" type="text" class="form-control" placeholder="Type Here">
+							<div class="input-group-append">
+								<a class="input-group-text" id="share" href="harhelp.html">Share</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col col-12">
+						<div class="btn-toolbar" role="filters" id="filters" aria-label="Selected Content Types"></div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<div class="box-row content" style="position: relative; ">
+			<div id="table" style="position: absolute; left: 14px; right: 14px;"></div>
+		</div>
+		<div class="box-row footer">
+			<div style="height:12px"></div>
+		</div>
+	</div>
+
+	<script>
+		var input = document.getElementById("file");
+
+		input.addEventListener("change", function() {
+			if (this.files && this.files[0]) {
+				var myFile = this.files[0];
+				parseHarFile(myFile);
+			}
+		});
+	</script>
+</body>
+</html>
