@@ -1,0 +1,14 @@
+{
+  "applications": [
+    {
+      "type": "sandbox",
+      "id": "symphony-tabs",
+      "name": "Symphony Tabs",
+      "description": "Table Support For Symphony",
+      "publisher": "Deutsche Bank",
+      "url": "https://tabs.symphony-consultancy.com:4000/controller.html?dev=true",
+      "icon": "https://tabs.symphony-consultancy.com:4000/icon.png",
+      "domain": "tabs.symphony-consultancy.com"
+    }
+  ]
+}
