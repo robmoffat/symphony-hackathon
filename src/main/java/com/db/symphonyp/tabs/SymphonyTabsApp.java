@@ -29,6 +29,8 @@ public class SymphonyTabsApp {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/bundle-local.json").allowedOrigins("*");
+                registry.addMapping("/bundle-linode.json").allowedOrigins("*");
+                registry.addMapping("/bundle-admin.json").allowedOrigins("*");
             }
         };
     }

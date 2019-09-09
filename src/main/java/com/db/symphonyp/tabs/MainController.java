@@ -65,24 +65,32 @@ public class MainController implements InitializingBean{
 	
 	@GetMapping("/podAuth")
 	@ResponseBody
-	public Map<String, Object> podAuth(@RequestParam("podId") String podId) {
-		LOG.info("Called podAuth with podId {}", podId);
+	public Map<String, Object> podAuth(@RequestParam("podId") String podId, @RequestParam(name = "dev",defaultValue="false" ) boolean dev) {
+		LOG.info("Called podAuth with podId {} dev= {}", podId, dev);
 		// get pod token
-		AppAuthResponse response = rsaAuth.appAuthenticate();
-		
 		Map<String, Object> out = new HashMap<String, Object>();
-		out.put("tokenA", response.getAppToken());
-		out.put("appId", response.getAppId());
-		out.put("tokenS", response.getSymphonyToken());
-		out.put("expireAt", response.getExpireAt());
-		out.put("dev", true);
+		
+		if (dev) {
+			out.put("tokenA", "someAppToken");
+			out.put("appId", "appId");
+			out.put("tokenS", "someSymphonyToken");
+			out.put("expireAt", System.currentTimeMillis());
+		} else {
+			AppAuthResponse response = rsaAuth.appAuthenticate();
+			out.put("tokenA", response.getAppToken());
+			out.put("appId", response.getAppId());
+			out.put("tokenS", response.getSymphonyToken());
+			out.put("expireAt", response.getExpireAt());
+		} 
+		
+		out.put("dev", dev);
 		LOG.info("Completed PodAuth {} with {} ", podId, out);
 		return out;
 	}
 	
 	@GetMapping("/appAuth")
 	@ResponseBody
-	public void appAuth(@RequestParam("appToken") String appToken, @RequestParam("podToken") String podToken) {
+	public void appAuth(@RequestParam("appToken") String appToken, @RequestParam("podToken") String podToken, @RequestParam(name="dev", defaultValue="false") boolean dev) {
 		LOG.info("Called appAuth with appToken {} and podToken {}", appToken, podToken);
 		LOG.info("Done appAuth (always returns ok)");
 	}
