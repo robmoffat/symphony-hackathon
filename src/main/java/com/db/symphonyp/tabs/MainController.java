@@ -3,6 +3,8 @@ package com.db.symphonyp.tabs;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,14 +16,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import authentication.SymExtensionAppRSAAuth;
+import configuration.SymConfig;
+import configuration.SymConfigLoader;
+import model.AppAuthResponse;
+
 @Controller
 public class MainController implements InitializingBean{
+	
+	private static final Logger LOG = LoggerFactory.getLogger(MainController.class);
 		
 	@Value("${baseUrl:https://localhost:4000}")
 	String baseUrl;
+		
+	SymExtensionAppRSAAuth rsaAuth;
 	
 	@Autowired
 	ObjectMapper mapper;
+	
+	@Value("${pod.host:https://develop2.symphony.com}")
+	String podHost;
 	
 	@GetMapping(path="/app.html")
 	public String appPage(Model m) {
@@ -31,6 +45,10 @@ public class MainController implements InitializingBean{
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
+		LOG.info("afterPropertiesSet on MainController = setting up SymBotClient");
+		SymConfig config = SymConfigLoader.loadFromFile("config.json");
+		rsaAuth = new SymExtensionAppRSAAuth(config);
+		LOG.info("set up rsaAuth");
 	}
 	
 	private void addParams(Model m) {
@@ -48,18 +66,25 @@ public class MainController implements InitializingBean{
 	@GetMapping("/podAuth")
 	@ResponseBody
 	public Map<String, Object> podAuth(@RequestParam("podId") String podId) {
+		LOG.info("Called podAuth with podId {}", podId);
+		// get pod token
+		AppAuthResponse response = rsaAuth.appAuthenticate();
+		
 		Map<String, Object> out = new HashMap<String, Object>();
-		out.put("tokenA", "token1");
-		out.put("appId", "symphony-tabs");
-		out.put("expireAt", System.currentTimeMillis()+1000000l);
+		out.put("tokenA", response.getAppToken());
+		out.put("appId", response.getAppId());
+		out.put("tokenS", response.getSymphonyToken());
+		out.put("expireAt", response.getExpireAt());
 		out.put("dev", true);
+		LOG.info("Completed PodAuth {} with {} ", podId, out);
 		return out;
 	}
 	
 	@GetMapping("/appAuth")
 	@ResponseBody
-	public void podAuth(@RequestParam("appToken") String appToken, @RequestParam("podToken") String podToken) {
-		// just works.
+	public void appAuth(@RequestParam("appToken") String appToken, @RequestParam("podToken") String podToken) {
+		LOG.info("Called appAuth with appToken {} and podToken {}", appToken, podToken);
+		LOG.info("Done appAuth (always returns ok)");
 	}
 	
 }
