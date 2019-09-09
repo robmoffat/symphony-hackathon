@@ -1,28 +1,56 @@
-var controllerId = 'multimeter:controller'
-var multimeterService = SYMPHONY.services.register(controllerId)
+const id = 'symphony-tabs'
+const outServiceName = id +':controller';
+const outService = SYMPHONY.services.register(outServiceName)
+const appName = 'Symphony Tabs';
+const inServices = ['modules', 'applications-nav', 'ui', 'share', 'extended-user-info'];
+const baseUrl = /*[[${baseUrl}]]*/ 'https://localhost:4000';
+var inModules = {};
+var tokens = {};
 
-SYMPHONY.remote.hello().then(function (data) {
-  SYMPHONY.application
-    .register('multimeter', [ 'entity', 'modules', 'applications-nav' ], [ controllerId ])
-    .then(function (response) {
-      var modulesService = SYMPHONY.services.subscribe('modules')
-      var navService = SYMPHONY.services.subscribe('applications-nav')
-      var baseUrl = /*[[${baseUrl}]]*/ 'https://localhost:4000';
+SYMPHONY.remote.hello()
+.then(function (data) {
+	// get pod token here
+	return fetch('[(${podAuthUrl})]'+data.pod);
+})
+.then(function (response) {
+	return response.json();
+})
+.then(function (appData) {
+	tokens['appToken'] = appData.tokenA;
+	if (appData.dev) {
+		return SYMPHONY.application.register(id, inServices, [ outServiceName ]);
+	} else {
+		return SYMPHONY.application.register(appData, inServices, [outServiceName]);
+	}
+})
+.then(function (response) {
+	tokens['podToken'] = response.tokenS;
+	return fetch('[(${appAuthUrl})]'+'appToken='+encodeURI(tokens['appToken'])+'&podToken='+encodeURI(tokens['podToken']));
+})
+.then(function (response) {
+   inServices.forEach(name => inModules[name] = SYMPHONY.services.subscribe(name));
+   const modulesService = inModules['modules'];
+   const navService = inModules['applications-nav'];
+    
 
-      navService.add('multimeter-nav', 'Multimeter - HAR Analysis', controllerId)
+   navService.add(id+"-nav", appName, outService.name);
 
-      multimeterService.implement({
-        select: function (id) {
-          if (id === 'multimeter-nav') {
-            modulesService.show(
-              'multimeter:page',
-              { title: 'Symphony Multimeter - HAR Analysis' },
-              controllerId,
-              baseUrl+'/har.html',
-              { 'canFloat': true }
-            )
-          }
-        }
-      })
-    })
+   outService.implement({
+     select: function(e) {
+       if (e == id+'-nav') {
+         modulesService.show(
+          id+"-app-panel", 
+          {title: 'Some Module'}, 
+          outService.name, 
+          baseUrl+"/app.html",
+          {canFloat: true});
+       }
+     }
+   })
+
+   console.log(appName+" controller initialized");
+})
+.catch(function(err) {
+   console.error(err);
+   console.error("Couldn't complete registration: "+appName);
 })

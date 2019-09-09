@@ -21,7 +21,7 @@
     <dependency>
       <groupId>com.symphony.platformsolutions</groupId>
       <artifactId>symphony-api-client-java</artifactId>
-      <version>1.0.35</version>
+      <version>1.0.40</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>
@@ -42,7 +42,16 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-    
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

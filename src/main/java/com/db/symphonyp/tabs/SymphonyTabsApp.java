@@ -17,7 +17,7 @@ public class SymphonyTabsApp {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/bundle*.json").allowedOrigins("*");
+                registry.addMapping("/bundle-local.json").allowedOrigins("*");
             }
         };
     }

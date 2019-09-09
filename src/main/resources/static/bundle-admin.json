@@ -1,0 +1,32 @@
+ {
+	"appGroupId": "symphony-tabs",
+	"name": "Symphony Tabs",
+	"description": "Provides editable and approvable table support to Symphony",
+	"publisher": "Deutsche Bank",
+	"loadUrl": "https://tabs.symphony-consultancy.com:4000/controller.html",
+	"domain": ".tabs.symphony-consultancy.com",
+	"iconUrl": "https://tabs.symphony-consultancy.com:4000/icon.png",
+	"notification": {
+		"url": "https://tabs.symphony-consultancy.com:4000/podInfo",
+		"apiKey": "super-secret-key"
+	},
+	"permissions": [
+		"ACT_AS_USER",
+		"GET_BASIC_CONTACT_INFO",
+		"GET_PRESENCE",
+		"SEND_MESSAGES",
+		"GET_USER_CONNECTIONS",
+		"REQUEST_USER_CONNECTIONS",
+		"SET_PRESENCE",
+		"GET_BASIC_USER_INFO",
+		"CREATE_USER_STREAM",
+		"LIST_USER_STREAMS",
+		"MANAGE_ROOMS",
+		"MANAGE_SIGNALS"
+	],
+	"allowOrigins": "tabs.symphony-consultancy.com",
+	"rsaKey": "-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAuee+cqqRzsBpdAPaHXFCqNdgwXIJ9/iVf0OxqxtdY19480TvMgpI5kRm98N9z7RT26hKozux7GVGSPSMl22ubQ1GIzLxwAEunq8l7sAp798cMg9tt0VOsShpGSVn2Jdd05GjyRrvQZ/Itpgom3qcrUqXjd9SCCk7Gy3CzMzEgwT1e4BGNvRN1/3CPq31v+8sMtS60CUnekiS1z/a17ezr4z8Qw2D65wP/klOXCpOFsB3o96i619JlqDc10Bl9y33ILAJpum+fjXPKcPO1Ept83OmOZCb5/iI/nTfZ+eQwcC4O4rOQQTRsWMmiNlokr75Y6vWwKrYpbNuXNes8plf8qIO692gRS94GuQ09woohnWQspHC9NsrN/zTKmzWZw04f/bEvaB/yZvgy0HtVTVTmhvjx2JeSYwyKeVmY7XxP3glvtX5z9M5XLJ6CbdV+3cNMFTxisDJZO9k79nY6SeJ27t9ZcvVZx6DZq6nnYIbPDemPCn54X3RxUJ07zdVJUePcdECAvN7yuKB/drK6aNU0I3g7UhczNX5+joD9SBVQ7J8q/7FrHXd/FQysTwYIwDn7WT5U0zy/a7OxTN8RMsJJGkSehSVL6/Sj8evHhG2H8mFgRTVXKijg85QO8OqY0dRQJQwfquu9eUQ7OMWOwaxf4igM0a/tVKxkYfwO5koUiMCAwEAAQ==\n-----END PUBLIC KEY-----"
+}
+    
+    
+    
