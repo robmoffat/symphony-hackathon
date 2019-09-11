@@ -39,7 +39,7 @@ public class MainController implements InitializingBean{
 	
 	@GetMapping(path="/app.html")
 	public String appPage(Model m) {
-		addParams(m);
+		addParams(m, false);
 		return "app.html";
 	}
 
@@ -51,15 +51,15 @@ public class MainController implements InitializingBean{
 		LOG.info("set up rsaAuth");
 	}
 	
-	private void addParams(Model m) {
+	private void addParams(Model m, boolean dev) {
 		m.addAttribute("baseUrl", baseUrl);
-		m.addAttribute("podAuthUrl", baseUrl+"/podAuth?dev=true&podId=");
-		m.addAttribute("appAuthUrl", baseUrl+"/appAuth?dev=true&");
+		m.addAttribute("podAuthUrl", baseUrl+"/podAuth?dev="+dev+"&podId=");
+		m.addAttribute("appAuthUrl", baseUrl+"/appAuth?dev="+dev+"&");
 	}
 
 	@GetMapping(path="/js/controller.js")
-	public String getController(Model m) {
-		addParams(m);
+	public String getController(Model m, @RequestParam(name = "dev",defaultValue="false" ) boolean dev) {
+		addParams(m, dev);
 		return "controller.js";
 	}
 	
@@ -91,7 +91,7 @@ public class MainController implements InitializingBean{
 	@GetMapping("/appAuth")
 	@ResponseBody
 	public void appAuth(@RequestParam("appToken") String appToken, @RequestParam("podToken") String podToken, @RequestParam(name="dev", defaultValue="false") boolean dev) {
-		LOG.info("Called appAuth with appToken {} and podToken {}", appToken, podToken);
+		LOG.info("Called appAuth with appToken {} and podToken {} and dev {}", appToken, podToken, dev);
 		LOG.info("Done appAuth (always returns ok)");
 	}
 	

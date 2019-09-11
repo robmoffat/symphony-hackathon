@@ -38,10 +38,10 @@ public class SymphonyTabsApp {
     @EventListener(ApplicationReadyEvent.class) 
     public void doSomethingAfterStartup() {
     	SymBotClient botClient = SymBotClient.initBotRsa("config.json");
-//    	if (!StringHelper.isNullOrEmptyString(infoStreamId)) {
-//    		OutboundMessage mes = new OutboundMessage("Started Symphony Tabs");
-//    		botClient.getMessagesClient().sendMessage(infoStreamId, mes);
-//    	}
+    	if (!StringHelper.isNullOrEmptyString(infoStreamId)) {
+    		OutboundMessage mes = new OutboundMessage("Started Symphony Tabs");
+    		botClient.getMessagesClient().sendMessage(infoStreamId, mes);
+    	}
     }
     
 }
