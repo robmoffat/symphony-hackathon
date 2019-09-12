@@ -1,51 +1,63 @@
 package com.db.symphonyp.tabs;
 
-import clients.SymBotClient;
 import listeners.RoomListener;
 import model.InboundMessage;
-import model.OutboundMessage;
 import model.Stream;
 import model.events.*;
+import org.springframework.stereotype.Component;
 
-public class RoomListenerImpl implements RoomListener {
-    private SymBotClient bot;
+@Component
+public class RoomListenerImpl implements WithBrain, RoomListener {
+    private BotBrain brain;
 
-    public RoomListenerImpl(SymBotClient botClient) {
-        bot = botClient;
+    public RoomListenerImpl withBrain(BotBrain brain) {
+        this.brain = brain;
+        return this;
     }
 
     public void onRoomMessage(InboundMessage message) {
-        String streamId = message.getStream().getStreamId();
-        String firstName = message.getUser().getFirstName();
-        String messageOut = String.format("Hello %s!", firstName);
-        this.bot.getMessagesClient().sendMessage(streamId, new OutboundMessage(messageOut));
+        brain.onRoomMessage(message);
     }
 
-    public void onUserJoinedRoom(UserJoinedRoom userJoinedRoom) {
-        String streamId = userJoinedRoom.getStream().getStreamId();
-        String firstName = userJoinedRoom.getAffectedUser().getFirstName();
-        String messageOut = String.format("Welcome %s!", firstName);
-        this.bot.getMessagesClient().sendMessage(streamId, new OutboundMessage(messageOut));
-    }
-
+    @Override
     public void onRoomCreated(RoomCreated roomCreated) {
+
     }
 
+    @Override
     public void onRoomDeactivated(RoomDeactivated roomDeactivated) {
+
     }
 
+    @Override
     public void onRoomMemberDemotedFromOwner(RoomMemberDemotedFromOwner roomMemberDemotedFromOwner) {
+
     }
 
+    @Override
     public void onRoomMemberPromotedToOwner(RoomMemberPromotedToOwner roomMemberPromotedToOwner) {
+
     }
 
+    @Override
     public void onRoomReactivated(Stream stream) {
+
     }
 
+    @Override
     public void onRoomUpdated(RoomUpdated roomUpdated) {
+
     }
 
-    public void onUserLeftRoom(UserLeftRoom userLeftRoom) {
+    @Override
+    public void onUserJoinedRoom(UserJoinedRoom userJoinedRoom) {
+
     }
+
+    @Override
+    public void onUserLeftRoom(UserLeftRoom userLeftRoom) {
+
+    }
+
+
 }

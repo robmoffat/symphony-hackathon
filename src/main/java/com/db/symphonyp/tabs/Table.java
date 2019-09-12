@@ -40,7 +40,7 @@ public class Table {
 	public List<String> getColumns() {
 		Set<String> out = new LinkedHashSet<>();
 		for (Map<String, Object> row : rows) {
-			row.keySet().addAll(out);
+			out.addAll(row.keySet());
 		}
 		
 		return new ArrayList<>(out);

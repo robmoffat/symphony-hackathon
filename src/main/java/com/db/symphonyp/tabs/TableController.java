@@ -57,6 +57,7 @@ public class TableController implements InitializingBean {
 		}
 		
 		SymOBORSAAuth auth = new SymOBORSAAuth(config);
+		auth.authenticate();
 		long userID = getIDFromJWT(jwt, om);
 		
 		LOG.info("Got user ID: "+userID);
@@ -66,6 +67,7 @@ public class TableController implements InitializingBean {
 		
 		SymOBOClient client = new SymOBOClient(config, authToken);
 		OutboundMessage message = convertToMessage(table);
+		LOG.info("Created Outbound Message: "+message.getMessage());
 		
 		client.getMessagesClient().sendTaggedMessage(streamId, message);
 	}
