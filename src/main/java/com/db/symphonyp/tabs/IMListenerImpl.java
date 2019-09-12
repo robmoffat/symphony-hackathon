@@ -1,25 +1,25 @@
 package com.db.symphonyp.tabs;
 
-import clients.ISymClient;
-import clients.SymBotClient;
 import listeners.IMListener;
 import model.InboundMessage;
-import model.OutboundMessage;
 import model.Stream;
+import org.springframework.stereotype.Component;
 
-public class IMListenerImpl implements IMListener {
-    private final ISymClient bot;
+@Component
+public class IMListenerImpl implements WithBrain, IMListener {
 
-    public IMListenerImpl(SymBotClient botClient) {
-        bot = botClient;
+    private BotBrain brain;
+
+    public IMListenerImpl withBrain(BotBrain brain) {
+        this.brain = brain;
+        return this;
     }
 
     public void onIMMessage(InboundMessage message) {
-        String streamId = message.getStream().getStreamId();
-        String messageOut = String.format("Hello %s!", message.getUser().getDisplayName());
-        bot.getMessagesClient().sendMessage(streamId, new OutboundMessage(messageOut));
+        brain.onIMMessage(message);
     }
 
     public void onIMCreated(Stream stream) {
     }
+
 }

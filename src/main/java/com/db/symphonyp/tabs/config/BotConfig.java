@@ -1,9 +1,6 @@
 package com.db.symphonyp.tabs.config;
 
 import clients.SymBotClient;
-import com.db.symphonyp.tabs.IMListenerImpl;
-import com.db.symphonyp.tabs.RoomListenerImpl;
-import listeners.DatafeedListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,18 +8,13 @@ import org.springframework.context.annotation.Configuration;
 public class BotConfig {
 
     @Bean
-    public SymBotClient botClient() {
-        return SymBotClient.initBotRsa("config.json");
+    public SymBotClient botClient75() {
+        return SymBotClient.initBotRsa("config75.json");
     }
 
     @Bean
-    public DatafeedListener imListenerImpl(SymBotClient botClient) {
-        return new IMListenerImpl(botClient);
-    }
-
-    @Bean
-    public DatafeedListener roomListenerImpl(SymBotClient botClient) {
-        return new RoomListenerImpl(botClient);
+    public SymBotClient botClient77() {
+        return SymBotClient.initBotRsa("config77.json");
     }
 
 }
