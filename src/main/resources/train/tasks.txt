@@ -1,0 +1,9 @@
+assign  ACTION
+task  ENTITY
+to  0
+Ivan  NAME
+
+assign  ACTION
+task  ENTITY
+to  0
+Joe  NAME

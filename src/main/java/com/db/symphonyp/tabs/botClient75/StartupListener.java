@@ -1,6 +1,10 @@
-package com.db.symphonyp.tabs;
+package com.db.symphonyp.tabs.botClient75;
 
+import clients.ISymClient;
 import clients.SymBotClient;
+import com.db.symphonyp.tabs.BotBrain;
+import com.db.symphonyp.tabs.common.IMListenerImpl;
+import com.db.symphonyp.tabs.common.RoomListenerImpl;
 import model.OutboundMessage;
 import org.hibernate.validator.internal.util.StringHelper;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,20 +18,16 @@ public class StartupListener {
     @Value("${symphony.stream-id:}")
     private String infoStreamId;
 
-    private final SymBotClient botClient75;
-    private final SymBotClient botClient77;
+    private final ISymClient botClient75;
     private final IMListenerImpl imListenerImpl;
     private final RoomListenerImpl roomListenerImpl;
     private final BotBrain botBrain75Controller;
-    private final BotBrain botBrain77Controller;
 
-    public StartupListener(SymBotClient botClient75, SymBotClient botClient77, IMListenerImpl imListenerImpl, RoomListenerImpl roomListenerImpl, BotBrain botBrain75Controller, BotBrain botBrain77Controller) {
-        this.botClient75 = botClient75;
-        this.botClient77 = botClient77;
+    public StartupListener(IMListenerImpl imListenerImpl, RoomListenerImpl roomListenerImpl, BotBrain botBrain75Controller, BotBrain botBrain76Controller) {
+        this.botClient75 = SymBotClient.initBotRsa("config75.json");
         this.imListenerImpl = imListenerImpl;
         this.roomListenerImpl = roomListenerImpl;
-        this.botBrain75Controller = botBrain75Controller;
-        this.botBrain77Controller = botBrain77Controller;
+        this.botBrain75Controller = botBrain75Controller.with(botClient75);
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -35,19 +35,11 @@ public class StartupListener {
         if (!StringHelper.isNullOrEmptyString(infoStreamId)) {
             OutboundMessage mes = new OutboundMessage("Started Tabs Bot");
             botClient75.getMessagesClient().sendMessage(infoStreamId, mes);
-
-            mes = new OutboundMessage("Started Bonds Bot");
-            botClient77.getMessagesClient().sendMessage(infoStreamId, mes);
         }
 
         // Link datafeed listeners
-        botClient75.getDatafeedEventsService().addListeners(
+        ((SymBotClient) botClient75).getDatafeedEventsService().addListeners(
                 imListenerImpl.withBrain(botBrain75Controller), roomListenerImpl.withBrain(botBrain75Controller)
-        );
-
-        // Link datafeed listeners
-        botClient77.getDatafeedEventsService().addListeners(
-                imListenerImpl.withBrain(botBrain77Controller), roomListenerImpl.withBrain(botBrain77Controller)
         );
     }
 }

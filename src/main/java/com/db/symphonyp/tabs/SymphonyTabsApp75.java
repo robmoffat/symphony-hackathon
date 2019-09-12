@@ -6,9 +6,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan({"com.db.symphonyp.tabs.app", "com.db.symphonyp.tabs.common"})
-public class SymphonyTabsApp {
+public class SymphonyTabsApp75 {
     public static void main(String [] args) {
-        SpringApplication.run(SymphonyTabsApp.class, args);
+        SpringApplication.run(SymphonyTabsApp75.class, args);
     }
 
 }

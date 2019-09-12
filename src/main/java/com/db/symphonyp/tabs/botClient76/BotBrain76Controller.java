@@ -1,4 +1,4 @@
-package com.db.symphonyp.tabs.botClient75;
+package com.db.symphonyp.tabs.botClient76;
 
 import clients.ISymClient;
 import com.db.symphonyp.tabs.BotBrain;
@@ -6,16 +6,14 @@ import model.InboundMessage;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class BotBrain75Controller implements BotBrain {
+public class BotBrain76Controller implements BotBrain {
 
     private ISymClient bot;
-
-
 
     public void process(InboundMessage message) {
 //        String streamId = message.getStream().getStreamId();
 //        String firstName = message.getUser().getFirstName();
-//        String messageOut = String.format("Hello %s! from 75", firstName);
+//        String messageOut = String.format("Hello %s! from bot 76", firstName);
 //        try {
 //            Thread.sleep(1000);
 //        } catch (InterruptedException e) {

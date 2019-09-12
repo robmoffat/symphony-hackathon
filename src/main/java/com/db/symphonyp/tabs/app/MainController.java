@@ -1,4 +1,4 @@
-package com.db.symphonyp.tabs;
+package com.db.symphonyp.tabs.app;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,8 +38,8 @@ public class MainController implements InitializingBean{
 	String podHost;
 	
 	@GetMapping(path="/app.html")
-	public String appPage(Model m) {
-		addParams(m, false);
+	public String appPage(Model m, @RequestParam(name = "dev", required= false, defaultValue="false" ) boolean dev) {
+		addParams(m, dev);
 		return "app.html";
 	}
 
@@ -55,12 +55,25 @@ public class MainController implements InitializingBean{
 		m.addAttribute("baseUrl", baseUrl);
 		m.addAttribute("podAuthUrl", baseUrl+"/podAuth?dev="+dev+"&podId=");
 		m.addAttribute("appAuthUrl", baseUrl+"/appAuth?dev="+dev+"&");
+		m.addAttribute("dev", dev);
 	}
 
 	@GetMapping(path="/js/controller.js")
-	public String getController(Model m, @RequestParam(name = "dev", required= false, defaultValue="false" ) boolean dev) {
+	public String getControllerJs(Model m, @RequestParam(name = "dev", required= false, defaultValue="false" ) boolean dev) {
 		addParams(m, dev);
 		return "controller.js";
+	}
+	
+	@GetMapping(path="/controller.html")
+	public String getControllerHtml(Model m, @RequestParam(name = "dev", required= false, defaultValue="false" ) boolean dev) {
+		addParams(m, dev);
+		return "controller.html";
+	}
+	
+	@GetMapping(path="/buttons.html")
+	public String getButtonsHtml(Model m, @RequestParam(name = "dev", required= false, defaultValue="false" ) boolean dev) {
+		addParams(m, dev);
+		return "buttons.html";
 	}
 	
 	@GetMapping("/podAuth")
@@ -97,8 +110,8 @@ public class MainController implements InitializingBean{
 
 	
 	@GetMapping(path="/js/app.js")
-	public String getAppJs(Model m) {
-		addParams(m, false);
+	public String getAppJs(Model m, @RequestParam(name = "dev",required= false,defaultValue="false" ) boolean dev) {
+		addParams(m, dev);
 		return "app.js";
 	}
 

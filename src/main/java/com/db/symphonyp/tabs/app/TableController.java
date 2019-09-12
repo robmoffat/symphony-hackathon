@@ -1,4 +1,4 @@
-package com.db.symphonyp.tabs;
+package com.db.symphonyp.tabs.app;
 
 import java.io.IOException;
 import java.util.Base64;
@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import com.db.symphonyp.tabs.common.Table;
+import com.db.symphonyp.tabs.common.TableConverter;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -68,11 +71,13 @@ public class TableController implements InitializingBean {
 		SymOBOClient client = new SymOBOClient(config, authToken);
 		OutboundMessage message = convertToMessage(table);
 		LOG.info("Created Outbound Message: "+message.getMessage());
+		LOG.info("With JSON: "+message.getData());
 		
 		client.getMessagesClient().sendTaggedMessage(streamId, message);
 	}
 
-	private OutboundMessage convertToMessage(Table table) {
+	private OutboundMessage convertToMessage(Table table) throws JsonProcessingException {
+		
 		return new OutboundMessage(c.getMessageML(table), c.getJson(table));
 	}
 
