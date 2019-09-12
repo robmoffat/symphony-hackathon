@@ -5,14 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.assertj.core.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jdk.internal.jline.internal.Log;
 
 @Component
 public class TableConverter {
@@ -23,7 +21,8 @@ public class TableConverter {
 	public String getMessageML(Table t) {
 		List<String> columns = t.getColumns();
 		return "<messageML><table><thead><tr>"+getColumnML(columns)+"</tr></thead><tbody>"+
-				getRowsML(t.getRows(),columns)+"</tbody></table></messageML>";
+				getRowsML(t.getRows(),columns)+"</tbody></table>" + 
+			"<div class=\"entity\" data-entity-id=\"object001\">actions</div> </messageML>";
 	}
 	
 	private String getRowsML(List<Map<String, Object>> rows, List<String> columns) {
@@ -53,27 +52,4 @@ public class TableConverter {
 		String outString = om.writeValueAsString(out);
 		return outString;
 	}
-	
-//	{
-//	    "object001":
-//	    {
-//	        "type":     "org.symphonyoss.fin.security",
-//	        "version":  "1.0",
-//	        "id":
-//	        [
-//	            {
-//	                "type":     "org.symphonyoss.fin.security.id.ticker",
-//	                "value":    "IBM"
-//	            },
-//	            {
-//	                "type":     "org.symphonyoss.fin.security.id.isin",
-//	                "value":    "US0378331005"
-//	            },
-//	            {
-//	                "type":     "org.symphonyoss.fin.security.id.cusip",
-//	                "value":    "037833100"
-//	            }
-//	        ]
-//	    }
-//	}
 }
