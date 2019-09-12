@@ -17,10 +17,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.db.symphonyp.tabs.common.Table;
 import com.db.symphonyp.tabs.common.TableConverter;
@@ -71,8 +73,9 @@ public class TableController implements InitializingBean {
 	}	
 		
 		
-	@PostMapping(path="/table/{streamId}", consumes="application/json")
-	public void postTable(@RequestBody Table table, @RequestHeader(name="Authorization") String jwt, @PathVariable("streamId") String streamId) throws JsonParseException, JsonMappingException, IOException {
+	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT}, path="/table/{streamId}", consumes = "application/json" )
+	@ResponseBody
+	public boolean postTable(@RequestBody Table table, @RequestHeader(name="Authorization") String jwt, @PathVariable("streamId") String streamId) throws JsonParseException, JsonMappingException, IOException {
 		if (table == null) {
 			table = getDefaultTable();
 		}
@@ -106,9 +109,10 @@ public class TableController implements InitializingBean {
 		LOG.info("Wrote to: "+out);
 		
 		client.getMessagesClient().sendTaggedMessage(streamId, message);
+		return true;
 	}
 
-	private OutboundMessage convertToMessage(Table table) throws JsonProcessingException {
+	public OutboundMessage convertToMessage(Table table) throws JsonProcessingException {
 		
 		return new OutboundMessage(c.getMessageML(table), c.getJson(table));
 	}

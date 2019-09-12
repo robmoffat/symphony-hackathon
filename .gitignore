@@ -5,3 +5,4 @@ twitter4j.properties
 .classpath
 /temp
 .settings/
+.idea
