@@ -148,6 +148,7 @@ public class BotBrain76Controller implements BotBrain {
     		File cdir = new File(cache);
     		File out = new File(cdir, ""+r+".json");
     		om.writeValue(out, basket);
+    		LOG.info("saved: "+out);
     		bot.getMessagesClient().sendTaggedMessage(streamId, new OutboundMessage( tc.getMessageML(basket), tc.getJson(basket) ));
     	}
     	catch (Exception e) {
