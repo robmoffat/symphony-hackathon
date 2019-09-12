@@ -21,7 +21,7 @@ public class TableConverter {
 	}
 	
 	private String getRowsML(List<Map<String, Object>> rows, List<String> columns) {
-		return rows.stream().map(r -> getRowML(r, columns)).reduce("", (a,b) -> a+b);
+		return "<tr>"+rows.stream().map(r -> getRowML(r, columns)).reduce("", (a,b) -> a+b)+"</tr>";
 	}
 
 	private String getRowML(Map<String, Object> r, List<String> columns) {
