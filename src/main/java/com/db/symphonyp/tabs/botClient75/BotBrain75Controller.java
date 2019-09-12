@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.stanford.nlp.simple.Document;
 import edu.stanford.nlp.simple.Sentence;
 import model.*;
+import model.events.SymphonyElementsAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import utils.FormBuilder;
@@ -28,6 +29,45 @@ public class BotBrain75Controller implements BotBrain {
 
     @Autowired
     private TableConverter tc;
+
+    private Table lastTable;
+
+
+    public void onElementsAction(User initiator, SymphonyElementsAction action) {
+        Map<String, Object> formValues = action.getFormValues();
+        String input = (String) formValues.get("tableName");
+        String messageOut;
+        switch (action.getFormId()) {
+            case "signoff-table-form":
+                messageOut = String.format("Hi %s! You signed off table: %s", initiator.getFirstName(), input);
+                bot.getMessagesClient().sendMessage(action.getStreamId(), new OutboundMessage(messageOut));
+                break;
+            case "create-table-form":
+                messageOut = String.format("Hi %s! You created the table: %s", initiator.getFirstName(), input);
+                bot.getMessagesClient().sendMessage(action.getStreamId(), new OutboundMessage(messageOut));
+                renderTableForm(action.getStreamId(), formValues);
+                break;
+        }
+//
+//        Map<String, Object> formValues = action.getFormValues();
+//        String input = (String) formValues.get("input-name");
+//
+//        String messageOut = String.format("Hi %s! You entered: %s", initiator.getFirstName(), input);
+//        bot.getMessagesClient().sendMessage(action.getStreamId(), new OutboundMessage(messageOut));
+    }
+
+    private void renderTableForm(String streamId, Map<String, Object> formValues) {
+        String formML = FormBuilder.builder("select-table-form")
+                .addHeader(6, "Table Reference: " + formValues.get("tableName"))
+                .addHeader(6, "Assigned To:")
+                .addPersonSelector("assignedTo", "Assign to..", true)
+                //.addTableSelect()
+                .addButton("confirm", "Confirm", FormButtonType.ACTION)
+                .addButton("reset", "Reset", FormButtonType.RESET)
+                .formatElement();
+
+        bot.getMessagesClient().sendMessage(streamId, new OutboundMessage(formML));
+    }
 
     public void process(InboundMessage message) {
 //        String streamId = message.getStream().getStreamId();
@@ -51,6 +91,7 @@ public class BotBrain75Controller implements BotBrain {
 
 
         if (table != null && table.getApprovals() == null) {
+            lastTable = table;
             renderApprovalsForm(message, table);
             //renderTable(message, table);
             //renderSelectTable(message, table);
