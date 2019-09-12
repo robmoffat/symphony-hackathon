@@ -15,6 +15,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <spring-boot.run.main-class>com.db.symphonyp.tabs.SymphonyTabsApp75</spring-boot.run.main-class>
     </properties>
 
     <dependencies>
@@ -63,6 +64,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>${spring-boot.run.main-class}</mainClass>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

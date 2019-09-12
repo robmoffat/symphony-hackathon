@@ -8,11 +8,9 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class BotBrain75Controller implements BotBrain {
 
-    private final ISymClient bot;
+    private ISymClient bot;
 
-    public BotBrain75Controller(ISymClient botClient75) {
-        this.bot = botClient75;
-    }
+
 
     public void process(InboundMessage message) {
 //        String streamId = message.getStream().getStreamId();
@@ -33,5 +31,11 @@ public class BotBrain75Controller implements BotBrain {
     @Override
     public void onIMMessage(InboundMessage message) {
         process(message);
+    }
+
+    @Override
+    public BotBrain with(ISymClient symClient) {
+        this.bot = symClient;
+        return this;
     }
 }

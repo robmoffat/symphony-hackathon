@@ -1,5 +1,7 @@
-package com.db.symphonyp.tabs;
+package com.db.symphonyp.tabs.common;
 
+import com.db.symphonyp.tabs.BotBrain;
+import com.db.symphonyp.tabs.WithBrain;
 import listeners.RoomListener;
 import model.InboundMessage;
 import model.Stream;
