@@ -12,7 +12,6 @@ SYMPHONY.remote.hello().then(function (data) {
 			var modulesService = SYMPHONY.services.subscribe('modules')
 			var shareService = SYMPHONY.services.subscribe('share');
 			var extendedUserInfo = SYMPHONY.services.subscribe('extended-user-info');
-
 			extendedUserInfo.getJwt().then(function (t) {
 				jwt = t;
 			});
@@ -22,12 +21,49 @@ SYMPHONY.remote.hello().then(function (data) {
 		});
 });
 
+<<<<<<< HEAD
 var tableData = [
  	{id:1, ISIN:"Test Bond", CCY:"USD", Amount: 1000000},
  	{id:2, ISIN:"Another Test Bond", CCY:"GBP", Amount: 500000}
 ];
 
 var table;
+=======
+	if (table == null) {
+		var tableData = [
+		 	{id:1, ISIN:"Test Bond", CCY:"USD", Amount: 1000000},
+		 	{id:2, ISIN:"Another Test Bond", CCY:"GBP", Amount: 500000}
+		 ];
+	} else {
+		tableData = table.rows;
+	}
+	
+	var table;
+	
+	var currentRow;
+	
+	window.addEventListener("load", function() {
+		console.log("loaded");
+		table = new Tabulator("#table", {
+			addRowPos:"bottom",
+			layout:"fitDataFill",
+			data: tableData,
+			height: "500px",
+			selectable:true,
+			columns: [
+				{ title: "ISIN", field: "ISIN", sorter: "string", editor:true}, 
+				{ title: "CCY", field: "CCY", sorter: "string", editor:true}, 
+				{ title: "Amount", field: "Amount", sorter: "number", align:"right", formatter:"money", formatterParams:{precision:0}, editor:true} 
+			],
+			renderComplete: function(x) {
+				console.log('done');
+			},
+			downloadReady: function(fileContents, blob) {
+				
+				var json = { rows: JSON.parse(fileContents) };
+				
+				console.log(json);
+>>>>>>> f0d89c579bfd061069dade2b34c2960883827d86
 
 window.addEventListener("load", function() {
 	console.log("loaded");
