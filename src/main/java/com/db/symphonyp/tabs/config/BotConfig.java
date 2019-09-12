@@ -13,8 +13,8 @@ public class BotConfig {
     }
 
     @Bean
-    public SymBotClient botClient77() {
-        return SymBotClient.initBotRsa("config77.json");
+    public SymBotClient botClient76() {
+        return SymBotClient.initBotRsa("config76.json");
     }
 
 }
