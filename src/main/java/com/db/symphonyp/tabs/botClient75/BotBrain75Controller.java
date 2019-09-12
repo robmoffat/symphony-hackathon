@@ -2,14 +2,20 @@ package com.db.symphonyp.tabs.botClient75;
 
 import clients.ISymClient;
 import com.db.symphonyp.tabs.BotBrain;
+import com.db.symphonyp.tabs.common.DataWrapper;
+import com.db.symphonyp.tabs.common.Table;
+import com.db.symphonyp.tabs.common.TableConverter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.stanford.nlp.simple.Document;
 import edu.stanford.nlp.simple.Sentence;
-import model.FormButtonType;
-import model.InboundMessage;
-import model.OutboundMessage;
+import model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import utils.FormBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 @Controller
@@ -17,6 +23,11 @@ public class BotBrain75Controller implements BotBrain {
 
     private ISymClient bot;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private TableConverter tc;
 
     public void process(InboundMessage message) {
 //        String streamId = message.getStream().getStreamId();
@@ -29,8 +40,21 @@ public class BotBrain75Controller implements BotBrain {
 //        }
 //        this.bot.getMessagesClient().sendMessage(streamId, new OutboundMessage(messageOut));
 
+        String streamId = message.getStream().getStreamId();
+        String data = message.getData();
+        Table table = null;
+        try {
+            table = objectMapper.readValue(data, DataWrapper.class).getObject001().getId().get(0);
+        } catch (Exception e) {
+//            e.printStackTrace();
+        }
 
-        if (message.getMessageText().toLowerCase().startsWith("create")) {
+
+        if (table != null && table.getApprovals() == null) {
+            renderApprovalsForm(message, table);
+            //renderTable(message, table);
+            //renderSelectTable(message, table);
+        } else if (message.getMessageText().toLowerCase().startsWith("create")) {
             renderCreateTableForm(message);
 
         } else if (message.getMessageText().toLowerCase().startsWith("approve")) {
@@ -59,6 +83,60 @@ public class BotBrain75Controller implements BotBrain {
             }
         }
 
+    }
+
+    private void renderApprovalsForm(InboundMessage message, Table table) {
+        String streamId = message.getStream().getStreamId();
+        String formML = FormBuilder.builder("approvals-table-form")
+                .addHeader(6, "Choose Approvals")
+                .addPersonSelector("assignedTo", "Assign to..", true)
+                .addButton("confirm", "Confirm", FormButtonType.ACTION)
+                .addButton("reset", "Reset", FormButtonType.RESET)
+                .formatElement();
+
+        bot.getMessagesClient().sendMessage(streamId, new OutboundMessage(formML));
+    }
+
+    private void renderSelectTable(InboundMessage message, Table table) {
+        String streamId = message.getStream().getStreamId();
+        FormBuilder builder = FormBuilder.builder("select-table-form");
+        List<List<String>> body = new ArrayList<>();
+        for (Map<String, Object> row : table.getRows()) {
+            ArrayList<String> list = new ArrayList<>();
+            for (String s : row.keySet()) {
+                list.add(row.get(s).toString());
+            }
+
+            body.add(list);
+        }
+
+
+        builder.addTableSelect(null,
+                null,
+                TableSelectPosition.RIGHT,
+                TableSelectType.BUTTON,
+                table.getColumns(),
+                body,
+                null);
+
+        String formML = builder.formatElement();
+        bot.getMessagesClient().sendMessage(streamId, new OutboundMessage(formML));
+    }
+
+    private void renderTable(InboundMessage message, Table table) {
+        String streamId = message.getStream().getStreamId();
+        FormBuilder builder = FormBuilder.builder("edit-table-form");
+//        for (String column : table.getColumns()) {
+//            builder.addHeader(1,column);
+//        }
+        for (Map<String, Object> row : table.getRows()) {
+            for (String key : row.keySet()) {
+                builder.addTextField(key, row.get(key).toString(), row.get(key).toString(), false, false, 1, 10);
+            }
+        }
+
+        String formML = builder.formatElement();
+        bot.getMessagesClient().sendMessage(streamId, new OutboundMessage(formML));
     }
 
     private void renderConfirmationTableForm(InboundMessage message) {

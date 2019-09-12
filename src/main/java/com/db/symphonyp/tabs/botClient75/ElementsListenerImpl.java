@@ -3,10 +3,12 @@ package com.db.symphonyp.tabs.botClient75;
 import clients.ISymClient;
 import listeners.DatafeedListener;
 import listeners.ElementsListener;
+import model.FormButtonType;
 import model.OutboundMessage;
 import model.User;
 import model.events.SymphonyElementsAction;
 import org.springframework.stereotype.Component;
+import utils.FormBuilder;
 
 import java.util.Map;
 
@@ -24,8 +26,9 @@ public class ElementsListenerImpl implements ElementsListener {
                 bot.getMessagesClient().sendMessage(action.getStreamId(), new OutboundMessage(messageOut));
                 break;
             case "create-table-form":
-                messageOut = String.format("Hi %s! You create the table: %s", initiator.getFirstName(), input);
+                messageOut = String.format("Hi %s! You created the table: %s", initiator.getFirstName(), input);
                 bot.getMessagesClient().sendMessage(action.getStreamId(), new OutboundMessage(messageOut));
+                renderTableForm(action.getStreamId(), formValues);
                 break;
         }
 //
@@ -34,6 +37,19 @@ public class ElementsListenerImpl implements ElementsListener {
 //
 //        String messageOut = String.format("Hi %s! You entered: %s", initiator.getFirstName(), input);
 //        bot.getMessagesClient().sendMessage(action.getStreamId(), new OutboundMessage(messageOut));
+    }
+
+    private void renderTableForm(String streamId, Map<String, Object> formValues) {
+        String formML = FormBuilder.builder("select-table-form")
+                .addHeader(6, "Table Reference: " + formValues.get("tableName"))
+                .addHeader(6, "Assigned To:")
+                .addPersonSelector("assignedTo", "Assign to..", true)
+                //.addTableSelect()
+                .addButton("confirm", "Confirm", FormButtonType.ACTION)
+                .addButton("reset", "Reset", FormButtonType.RESET)
+                .formatElement();
+
+        bot.getMessagesClient().sendMessage(streamId, new OutboundMessage(formML));
     }
 
     public DatafeedListener with(ISymClient bot) {
