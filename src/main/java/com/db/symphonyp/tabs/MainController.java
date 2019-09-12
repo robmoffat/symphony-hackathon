@@ -58,14 +58,14 @@ public class MainController implements InitializingBean{
 	}
 
 	@GetMapping(path="/js/controller.js")
-	public String getController(Model m, @RequestParam(name = "dev",defaultValue="false" ) boolean dev) {
+	public String getController(Model m, @RequestParam(name = "dev", required= false, defaultValue="false" ) boolean dev) {
 		addParams(m, dev);
 		return "controller.js";
 	}
 	
 	@GetMapping("/podAuth")
 	@ResponseBody
-	public Map<String, Object> podAuth(@RequestParam("podId") String podId, @RequestParam(name = "dev",defaultValue="false" ) boolean dev) {
+	public Map<String, Object> podAuth(@RequestParam("podId") String podId, @RequestParam(name = "dev",required= false,defaultValue="false" ) boolean dev) {
 		LOG.info("Called podAuth with podId {} dev= {}", podId, dev);
 		// get pod token
 		Map<String, Object> out = new HashMap<String, Object>();
@@ -90,9 +90,16 @@ public class MainController implements InitializingBean{
 	
 	@GetMapping("/appAuth")
 	@ResponseBody
-	public void appAuth(@RequestParam("appToken") String appToken, @RequestParam("podToken") String podToken, @RequestParam(name="dev", defaultValue="false") boolean dev) {
+	public void appAuth(@RequestParam("appToken") String appToken, @RequestParam("podToken") String podToken, @RequestParam(name="dev", required= false, defaultValue="false") boolean dev) {
 		LOG.info("Called appAuth with appToken {} and podToken {} and dev {}", appToken, podToken, dev);
 		LOG.info("Done appAuth (always returns ok)");
+	}
+
+	
+	@GetMapping(path="/js/app.js")
+	public String getAppJs(Model m) {
+		addParams(m, false);
+		return "app.js";
 	}
 	
 }
