@@ -101,5 +101,6 @@ public class MainController implements InitializingBean{
 		addParams(m, false);
 		return "app.js";
 	}
+
 	
 }

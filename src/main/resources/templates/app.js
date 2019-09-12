@@ -10,15 +10,25 @@ var baseUrl = /*[[${baseUrl}]]*/ 'https://localhost:4000';
 //			var modulesService = SYMPHONY.services.subscribe('modules')
 //			var shareService = SYMPHONY.services.subscribe('share');
 
+
+		var tableData = [
+		 	{id:1, row:"Test Bond"},
+		 	{id:2, row:"Another Test Bond"}
+		 ];
+
+		window.addEventListener("load", function() {
+			console.log("loaded");
 			var table = new Tabulator("#table", {
 				data: tableData,
-				height: "100%",
+				height: "500px",
 				columns: [
 					{ title: "Bond", field: "row", sorter: "number", width: 80}, 
 				],
 				renderComplete: function(x) {
-					console.log('done')
-				},
+					console.log('done');
+				}
 			});
+		},false);
+
 //		});
 //})

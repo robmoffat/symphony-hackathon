@@ -31,9 +31,20 @@ SYMPHONY.remote.hello()
    inServices.forEach(name => inModules[name] = SYMPHONY.services.subscribe(name));
    const modulesService = inModules['modules'];
    const navService = inModules['applications-nav'];
+   const uiservice = inModules['ui'];
     
 
    navService.add(id+"-nav", appName, outService.name);
+   
+   uiservice.registerExtension(
+	"single-user-im",
+	"hello-im",
+	outServiceName,
+	{
+		label: "Create table",
+		data: {"datetime": Date()}
+	}
+   );
 
    outService.implement({
      select: function(e) {
@@ -45,6 +56,9 @@ SYMPHONY.remote.hello()
           baseUrl+"/app.html",
           {canFloat: true});
        }
+     },
+     trigger: function(uiClass, id, payload, data) {
+    	 console.log("Create table button pressed");
      }
    })
 
