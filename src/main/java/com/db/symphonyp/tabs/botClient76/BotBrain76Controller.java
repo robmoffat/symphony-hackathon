@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -115,13 +116,13 @@ public class BotBrain76Controller implements BotBrain {
     		
     		double thisp = bond.price * number;
     		
-    		LOG.info(bond.price + "/" + number + "=" + thisp);
-    		HashMap<String, Object> row = new HashMap<String, Object>();
+    		LOG.info(bond.isin + " " + bond.price + "/" + number + "=" + thisp);
+    		LinkedHashMap<String, Object> row = new LinkedHashMap<String, Object>();
     		
     		row.put("isin", bond.isin);
     		row.put("bond", bond.bond);
     		row.put("price", df2.format(bond.price));
-    		row.put("volume", df2.format(thisp));
+    		row.put("volume", df2.format(number));
 
     		rows.add(row);
     		
@@ -135,7 +136,7 @@ public class BotBrain76Controller implements BotBrain {
     	
     	LOG.info(s);
     	try {
-    	  bot.getMessagesClient().sendTaggedMessage(streamId, new OutboundMessage( tc.getMessageML( basket), tc.getJson(basket) ));
+    	  bot.getMessagesClient().sendTaggedMessage(streamId, new OutboundMessage( tc.getMessageML(basket), tc.getJson(basket) ));
     	}
     	catch (Exception e) {
     		LOG.error("Unable to post message, " + e.getMessage(), e);
