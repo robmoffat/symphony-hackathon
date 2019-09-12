@@ -1,22 +1,18 @@
 package com.db.symphonyp.tabs.common;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.assertj.core.util.Arrays;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import jdk.internal.jline.internal.Log;
-
 @Component
 public class TableConverter {
-	
+
 	@Autowired
 	ObjectMapper om;
 
@@ -25,7 +21,7 @@ public class TableConverter {
 		return "<messageML><table><thead><tr>"+getColumnML(columns)+"</tr></thead><tbody>"+
 				getRowsML(t.getRows(),columns)+"</tbody></table></messageML>";
 	}
-	
+
 	private String getRowsML(List<Map<String, Object>> rows, List<String> columns) {
 		return "<tr>"+rows.stream().map(r -> getRowML(r, columns)).reduce("", (a,b) -> a+b)+"</tr>";
 	}
@@ -46,14 +42,14 @@ public class TableConverter {
 		Map<String, Object> ob1 = new HashMap<String, Object>();
 		ob1.put("type", "com.db.symphonyp.tabs");
 		ob1.put("version", "1.0");
-		
+
 		ob1.put("id", Collections.singletonList(t));
-		
+
 		out.put("object001", ob1);
 		String outString = om.writeValueAsString(out);
 		return outString;
 	}
-	
+
 //	{
 //	    "object001":
 //	    {
