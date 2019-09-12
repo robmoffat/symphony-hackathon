@@ -2,7 +2,7 @@ const id = 'symphony-tabs'
 const outServiceName = id +':controller';
 const outService = SYMPHONY.services.register(outServiceName)
 const appName = 'Symphony Tabs';
-const inServices = ['modules', 'applications-nav', 'ui', 'share', 'extended-user-info'];
+const inServices = ['modules', 'applications-nav', 'ui', 'share', 'extended-user-info', 'entity'];
 const baseUrl = /*[[${baseUrl}]]*/ 'https://localhost:4000';
 var inModules = {};
 var tokens = {};
@@ -31,7 +31,9 @@ SYMPHONY.remote.hello()
    inServices.forEach(name => inModules[name] = SYMPHONY.services.subscribe(name));
    const modulesService = inModules['modules'];
    const navService = inModules['applications-nav'];
+   const entityService = inModules["entity"];
     
+   entityService.registerRenderer('com.db.symphonyp.tabs', {}, outServiceName)
 
    navService.add(id+"-nav", appName, outService.name);
 

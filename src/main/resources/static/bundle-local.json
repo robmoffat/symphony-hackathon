@@ -2,8 +2,8 @@
   "applications": [
     {
       "type": "sandbox",
-      "id": "symphony-tabs",
-      "name": "Symphony Tabs",
+      "id": "symphony-tabs-2",
+      "name": "Symphony Tabs Local",
       "description": "Table Support For Symphony",
       "publisher": "Deutsche Bank",
       "url": "https://localhost:4000/controller.html?dev=true",
