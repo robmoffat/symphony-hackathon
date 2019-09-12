@@ -12,11 +12,14 @@ var baseUrl = /*[[${baseUrl}]]*/ 'https://localhost:4000';
 //			var modulesService = SYMPHONY.services.subscribe('modules')
 //			var shareService = SYMPHONY.services.subscribe('share');
 
-
-		var tableData = [
-		 	{id:1, ISIN:"Test Bond", CCY:"USD", Amount: 1000000},
-		 	{id:2, ISIN:"Another Test Bond", CCY:"GBP", Amount: 500000}
-		 ];
+		if (table == null) {
+			var tableData = [
+			 	{id:1, ISIN:"Test Bond", CCY:"USD", Amount: 1000000},
+			 	{id:2, ISIN:"Another Test Bond", CCY:"GBP", Amount: 500000}
+			 ];
+		} else {
+			tableData = table.rows;
+		}
 		
 		var table;
 		

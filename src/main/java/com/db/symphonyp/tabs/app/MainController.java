@@ -1,5 +1,6 @@
 package com.db.symphonyp.tabs.app;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.db.symphonyp.tabs.common.Table;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import authentication.SymExtensionAppRSAAuth;
@@ -37,9 +41,20 @@ public class MainController implements InitializingBean{
 	@Value("${pod.host:https://develop2.symphony.com}")
 	String podHost;
 	
+	@Value("${dev}")
+	boolean dev = false;
+	
+	@Autowired
+	TableController tc;
+	
 	@GetMapping(path="/app.html")
-	public String appPage(Model m, @RequestParam(name = "dev", required= false, defaultValue="false" ) boolean dev) {
+	public String appPage(Model m, @RequestParam(name="id", required = false) String id, @RequestParam(name="stream", required = false) String stream) throws JsonParseException, JsonMappingException, IOException {
 		addParams(m, dev);
+		if (id != null) {
+			Table t = tc.getTable(id);
+			m.addAttribute("data", t);
+		}
+		m.addAttribute("stream", stream);
 		return "app.html";
 	}
 
@@ -71,8 +86,9 @@ public class MainController implements InitializingBean{
 	}
 	
 	@GetMapping(path="/buttons.html")
-	public String getButtonsHtml(Model m, @RequestParam(name = "dev", required= false, defaultValue="false" ) boolean dev) {
+	public String getButtonsHtml(Model m, @RequestParam(name="id", required = false) String id) {
 		addParams(m, dev);
+		m.addAttribute("id", id);
 		return "buttons.html";
 	}
 	

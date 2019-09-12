@@ -1,11 +1,13 @@
 package com.db.symphonyp.tabs.app;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +15,12 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.db.symphonyp.tabs.common.Table;
 import com.db.symphonyp.tabs.common.TableConverter;
@@ -49,7 +53,25 @@ public class TableController implements InitializingBean {
 	@Autowired
 	TableConverter c;
 	
-	//@PostMapping(path="/table/{streamId}")
+	@Value("${cache:cache}")
+	String cache;
+	
+	public Table getTable(String id) throws JsonParseException, JsonMappingException, IOException {
+		File cdir = new File(cache);
+		File in = new File(cdir, ""+id+".json");
+		Table t = om.readValue(in, Table.class);
+		
+		LOG.info("Read table"+in);
+		return t;
+	}
+	@GetMapping(path="/table/approve")
+	public void approveTable(@RequestParam("id") String id, @RequestHeader(name="Authorization") String jwt, @PathVariable("streamId") String streamId) throws JsonParseException, JsonMappingException, IOException {
+	
+	
+	}	
+		
+		
+	@PostMapping(path="/table/{streamId}", consumes="application/json")
 	public void postTable(@RequestBody Table table, @RequestHeader(name="Authorization") String jwt, @PathVariable("streamId") String streamId) throws JsonParseException, JsonMappingException, IOException {
 		if (table == null) {
 			table = getDefaultTable();
@@ -62,8 +84,12 @@ public class TableController implements InitializingBean {
 		SymOBORSAAuth auth = new SymOBORSAAuth(config);
 		auth.authenticate();
 		long userID = getIDFromJWT(jwt, om);
+		long r = new Random().nextLong();
+
 		
 		LOG.info("Got user ID: "+userID);
+		
+		table.setTableId(""+r);
 		
 		SymOBOUserRSAAuth authToken = auth.getUserAuth(userID);
 		LOG.info("Got Auth Token: "+authToken.getSessionToken());
@@ -72,6 +98,12 @@ public class TableController implements InitializingBean {
 		OutboundMessage message = convertToMessage(table);
 		LOG.info("Created Outbound Message: "+message.getMessage());
 		LOG.info("With JSON: "+message.getData());
+		
+		
+		File cdir = new File(cache);
+		File out = new File(cdir, ""+r+".json");
+		om.writeValue(out, table);
+		LOG.info("Wrote to: "+out);
 		
 		client.getMessagesClient().sendTaggedMessage(streamId, message);
 	}
@@ -109,6 +141,7 @@ public class TableController implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		LOG.info("afterPropertiesSet on TableController = setting up SymBotClient");
 		config = SymConfigLoader.loadFromFile("config.json");
+		new File(cache).mkdir();
 		LOG.info("set up rsaAuth");
 	}
 	
