@@ -1,0 +1,17 @@
+{
+  "sessionAuthHost": "develop2.symphony.com",
+  "sessionAuthPort": 443,
+  "keyAuthHost": "develop2.symphony.com",
+  "keyAuthPort": 443,
+  "podHost": "develop2.symphony.com",
+  "podPort": 443,
+  "agentHost": "develop2.symphony.com",
+  "agentPort": 443,
+  "botUsername": "firm1_hackathon_bot_77",
+  "botEmailAddress": "firm1_hackathon_bot_77@devmeetup.com",
+  "botPrivateKeyPath": "bot_77",
+  "botPrivateKeyName": "firm1_innovate_hackathon_bot_77_privatekey.pem",
+  "appId": "symphony-tabs",
+  "appPrivateKeyPath": "app",
+  "appPrivateKeyName": "app-private.pkcs8"
+}
