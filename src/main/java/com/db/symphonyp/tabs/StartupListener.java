@@ -18,16 +18,16 @@ public class StartupListener {
     private final SymBotClient botClient77;
     private final IMListenerImpl imListenerImpl;
     private final RoomListenerImpl roomListenerImpl;
-    private final BotBrain brain75;
-    private final BotBrain brain77;
+    private final BotBrain botBrain75Controller;
+    private final BotBrain botBrain77Controller;
 
-    public StartupListener(SymBotClient botClient75, SymBotClient botClient77, IMListenerImpl imListenerImpl, RoomListenerImpl roomListenerImpl, BotBrain brain75, BotBrain brain77) {
+    public StartupListener(SymBotClient botClient75, SymBotClient botClient77, IMListenerImpl imListenerImpl, RoomListenerImpl roomListenerImpl, BotBrain botBrain75Controller, BotBrain botBrain77Controller) {
         this.botClient75 = botClient75;
         this.botClient77 = botClient77;
         this.imListenerImpl = imListenerImpl;
         this.roomListenerImpl = roomListenerImpl;
-        this.brain75 = brain75;
-        this.brain77 = brain77;
+        this.botBrain75Controller = botBrain75Controller;
+        this.botBrain77Controller = botBrain77Controller;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -42,12 +42,12 @@ public class StartupListener {
 
         // Link datafeed listeners
         botClient75.getDatafeedEventsService().addListeners(
-                imListenerImpl.withBrain(brain75), roomListenerImpl.withBrain(brain75)
+                imListenerImpl.withBrain(botBrain75Controller), roomListenerImpl.withBrain(botBrain75Controller)
         );
 
         // Link datafeed listeners
         botClient77.getDatafeedEventsService().addListeners(
-                imListenerImpl.withBrain(brain77), roomListenerImpl.withBrain(brain77)
+                imListenerImpl.withBrain(botBrain77Controller), roomListenerImpl.withBrain(botBrain77Controller)
         );
     }
 }

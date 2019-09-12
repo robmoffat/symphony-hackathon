@@ -4,16 +4,14 @@ import clients.ISymClient;
 import com.db.symphonyp.tabs.BotBrain;
 import model.InboundMessage;
 import model.OutboundMessage;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@Qualifier("brain77")
-public class BotBrainController implements BotBrain {
+public class BotBrain77Controller implements BotBrain {
 
     private final ISymClient bot;
 
-    public BotBrainController(ISymClient botClient77) {
+    public BotBrain77Controller(ISymClient botClient77) {
         this.bot = botClient77;
     }
 
