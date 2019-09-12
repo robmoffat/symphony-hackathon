@@ -16,6 +16,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import model.InboundMessage;
 import model.OutboundMessage;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 import java.text.DecimalFormat;
@@ -33,6 +34,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -43,6 +45,9 @@ public class BotBrain76Controller implements BotBrain {
 	
 	@Autowired
 	TableConverter tc;
+	
+	@Value("${cache:cache}")
+	String cache;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(BotBrain76Controller.class);
 	
@@ -132,11 +137,18 @@ public class BotBrain76Controller implements BotBrain {
     	LOG.info("priced basket " + rows.size() + " entries");
     	basket.setRows(rows);
     	
+		long r = new Random().nextLong();
+		basket.setTableId(""+r);
+    	
+		
     	String s = tc.getMessageML( basket);
     	
     	LOG.info(s);
     	try {
-    	  bot.getMessagesClient().sendTaggedMessage(streamId, new OutboundMessage( tc.getMessageML(basket), tc.getJson(basket) ));
+    		File cdir = new File(cache);
+    		File out = new File(cdir, ""+r+".json");
+    		om.writeValue(out, basket);
+    		bot.getMessagesClient().sendTaggedMessage(streamId, new OutboundMessage( tc.getMessageML(basket), tc.getJson(basket) ));
     	}
     	catch (Exception e) {
     		LOG.error("Unable to post message, " + e.getMessage(), e);
