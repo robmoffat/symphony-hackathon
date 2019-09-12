@@ -12,29 +12,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import authentication.ISymOBOAuth;
-import authentication.SymExtensionAppRSAAuth;
 import authentication.SymOBORSAAuth;
 import authentication.SymOBOUserRSAAuth;
-import clients.SymBotClient;
 import clients.SymOBOClient;
 import configuration.SymConfig;
 import configuration.SymConfigLoader;
 import model.OutboundMessage;
-import utils.JwtHelper;
 
-@RestController
+@Controller
 public class TableController implements InitializingBean {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TableController.class);
@@ -50,7 +46,7 @@ public class TableController implements InitializingBean {
 	@Autowired
 	TableConverter c;
 	
-	@PostMapping(name="/table/{streamId}")
+	//@PostMapping(name="/table/{streamId}")
 	public void postTable(@RequestBody Table table, @RequestHeader(name="Authorization") String jwt, @PathVariable("streamId") String streamId) throws JsonParseException, JsonMappingException, IOException {
 		if (table == null) {
 			table = getDefaultTable();
