@@ -65,11 +65,12 @@ SYMPHONY.remote.hello()
      },
      render: function(type, data) {
 	    if (type == "com.db.symphonyp.tabs") {
-	      return {
-	        template: '<entity><iframe src="'+baseUrl+'/buttons.html" /></entity>',
-	        data: {}
-	      };
-	    }
+	      var tableId = data.id[0] ? data.id[0].tableId : 'none';
+		     return {
+		        template: '<entity><iframe src="'+baseUrl+'/buttons.html?id='+tableId+'" /></entity>',
+		        data: {}
+		      };
+	      }
      }
    })
 

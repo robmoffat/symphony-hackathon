@@ -1,6 +1,54 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="bootstrap-4.3.1-dist/css/bootstrap.min.css" />
+		<script type="text/javascript" src="/symphony/symphony-api.js" charset="utf-8"></script>
 	</head>
-	<body>Some buttons here</body>
+	<body>
+		<div>
+		<button class="btn btn-info"  id="approve">Approve</button>
+		<button class="btn btn-info" id="edit">Edit</button>
+		</div>
+		
+		
+		<script type="text/javascript" th:inline="javascript">
+			const dev = /*[[${dev}]]*/ false;
+			const id = 'symphony-tabs' + (dev ? '-local' : '')
+			
+			const tableId = /*[[${id}]]*/ '';
+			
+			const approve = document.querySelector("#approve");
+			const edit = document.querySelector("#edit");
+			var baseUrl = /*[[${baseUrl}]]*/ 'https://localhost:4000';
+
+			
+			SYMPHONY.remote.hello().then(function (data) {
+		
+			SYMPHONY.application
+				.connect(id, [id+':controller', 'dialogs', 'share', 'modules', 'extended-user-info'], ['buttons-'+id])
+				.then(function (response) {
+					var modulesService = SYMPHONY.services.subscribe('modules');
+					var eui = SYMPHONY.services.subscribe('extended-user-info');
+					
+					edit.addEventListener("click", function() {
+						modulesService.show(
+						          id+"-app-panel", 
+						          {title: 'Table Editor'}, 
+						          id+":controller",
+						          baseUrl+"/app.html?dev="+dev+"&id="+tableId,
+						          {canFloat: true});
+					});
+					
+					approve.addEventListener("click", function() {
+						eui.getJwt().then(jwt => {
+							fetch(baseUrl+"/table/approve?id="+tableId, {
+								headers: {
+									'Authorization' : 'Bearer '+jwt
+								}
+							})
+						});
+					})
+				});
+			});
+		</script>
+	</body>
 </html>

@@ -11,6 +11,16 @@ public class Table {
 	private List<Map<String, Object>> rows;
 
 	private Map<String, String> approvals;
+	
+	private String tableId;
+
+	public String getTableId() {
+		return tableId;
+	}
+
+	public void setTableId(String id) {
+		this.tableId = id;
+	}
 
 	public Table(List<Map<String, Object>> rows, Map<String, String> approvals) {
 		super();
