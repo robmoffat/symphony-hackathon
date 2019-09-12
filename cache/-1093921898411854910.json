@@ -1,1 +1,15 @@
-"{\"object001\":{\"id\":[{\"rows\":[{\"name\":\"some name\",\"bool\":true,\"date\":\"2019-09-12T13:58:26.567+0000\",\"int\":55,\"float\":453.3}],\"approvals\":{\"robert.moffat@db.com\":\"none\"},\"id\":null,\"columns\":[\"name\",\"bool\",\"date\",\"int\",\"float\"]}],\"type\":\"com.db.symphonyp.tabs\",\"version\":\"1.0\"}}"
+{
+	"rows": [
+		{
+			"isin": "some name",
+			"bond": true,
+			"price": "2343",
+			"volume": 55,
+			"float": 453.3
+		}
+	],
+	"approvals": {
+		"robert.moffat@db.com": "none"
+	},
+	"tableId": "-7979400272971491579"
+}

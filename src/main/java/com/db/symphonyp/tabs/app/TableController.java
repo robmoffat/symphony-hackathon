@@ -31,6 +31,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.tools.javac.util.StringUtils;
 
 import authentication.SymOBORSAAuth;
 import authentication.SymOBOUserRSAAuth;
@@ -60,11 +61,14 @@ public class TableController implements InitializingBean {
 	
 	public Table getTable(String id) throws JsonParseException, JsonMappingException, IOException {
 		File cdir = new File(cache);
-		File in = new File(cdir, ""+id+".json");
-		Table t = om.readValue(in, Table.class);
+		if ((id != null) && (!"null".equals(id)) && (!org.springframework.util.StringUtils.isEmpty(id))) {
+			File in = new File(cdir, ""+id+".json");
+			Table t = om.readValue(in, Table.class);
+			LOG.info("Read table"+in);
+			return t;
+		}
 		
-		LOG.info("Read table"+in);
-		return t;
+		return null;
 	}
 	@GetMapping(path="/table/approve")
 	public void approveTable(@RequestParam("id") String id, @RequestHeader(name="Authorization") String jwt, @PathVariable("streamId") String streamId) throws JsonParseException, JsonMappingException, IOException {
