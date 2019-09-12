@@ -94,5 +94,12 @@ public class MainController implements InitializingBean{
 		LOG.info("Called appAuth with appToken {} and podToken {} and dev {}", appToken, podToken, dev);
 		LOG.info("Done appAuth (always returns ok)");
 	}
+
+	
+	@GetMapping(path="/js/app.js")
+	public String getAppJs(Model m) {
+		addParams(m, false);
+		return "app.js";
+	}
 	
 }

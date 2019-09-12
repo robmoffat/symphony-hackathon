@@ -58,7 +58,12 @@ public class TableController implements InitializingBean {
 		
 		SymOBORSAAuth auth = new SymOBORSAAuth(config);
 		long userID = getIDFromJWT(jwt, om);
+		
+		LOG.info("Got user ID: "+userID);
+		
 		SymOBOUserRSAAuth authToken = auth.getUserAuth(userID);
+		LOG.info("Got Auth Token: "+authToken.getSessionToken());
+		
 		SymOBOClient client = new SymOBOClient(config, authToken);
 		OutboundMessage message = convertToMessage(table);
 		
