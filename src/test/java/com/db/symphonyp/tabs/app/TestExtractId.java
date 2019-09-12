@@ -1,4 +1,4 @@
-package com.db.symphonyp.tabs;
+package com.db.symphonyp.tabs.app;
 
 import java.io.IOException;
 

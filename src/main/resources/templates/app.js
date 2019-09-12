@@ -14,23 +14,53 @@ var baseUrl = /*[[${baseUrl}]]*/ 'https://localhost:4000';
 
 
 		var tableData = [
-		 	{id:1, row:"Test Bond"},
-		 	{id:2, row:"Another Test Bond"}
+		 	{id:1, ISIN:"Test Bond", CCY:"USD", Amount: 1000000},
+		 	{id:2, ISIN:"Another Test Bond", CCY:"GBP", Amount: 500000}
 		 ];
+		
+		var table;
+		
+		var currentRow;
 
 		window.addEventListener("load", function() {
 			console.log("loaded");
-			var table = new Tabulator("#table", {
+			table = new Tabulator("#table", {
+				addRowPos:"bottom",
+				layout:"fitDataFill",
 				data: tableData,
 				height: "500px",
+				selectable:true,
 				columns: [
-					{ title: "Bond", field: "row", sorter: "number", width: 80}, 
+					{ title: "ISIN", field: "ISIN", sorter: "string", editor:true}, 
+					{ title: "CCY", field: "CCY", sorter: "string", editor:true}, 
+					{ title: "Amount", field: "Amount", sorter: "number", editor:true} 
 				],
 				renderComplete: function(x) {
 					console.log('done');
+				},
+				downloadReady: function(fileContents, blob) {
+					console.log(fileContents);
+					return false;
 				}
 			});
+			
 		},false);
 
+		function addRow() {
+			table.addRow();
+//			table.addRow({id: 0, ISIN:"Added Row", CCY:"EUR", Amount:0});
+		}
+		
+		function deleteRow() {
+			table.getSelectedRows().forEach(function(row) {
+				console.log(row.getData());
+				row.delete();
+			});
+		}
+		
+		function send() {
+			table.download("json", "data.json")
+		}
+		
 //		});
 //})
