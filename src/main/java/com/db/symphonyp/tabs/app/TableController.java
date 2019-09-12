@@ -83,7 +83,7 @@ public class TableController implements InitializingBean {
 		return true;
 	}
 
-	private OutboundMessage convertToMessage(Table table) throws JsonProcessingException {
+	public OutboundMessage convertToMessage(Table table) throws JsonProcessingException {
 		
 		return new OutboundMessage(c.getMessageML(table), c.getJson(table));
 	}
