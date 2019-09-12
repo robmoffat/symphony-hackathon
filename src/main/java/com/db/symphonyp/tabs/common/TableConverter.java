@@ -20,7 +20,8 @@ public class TableConverter {
 	public String getMessageML(Table t) {
 		List<String> columns = t.getColumns();
 		return "<messageML><table><thead><tr>"+getColumnML(columns)+"</tr></thead><tbody>"+
-				getRowsML(t.getRows(),columns)+"</tbody></table></messageML>";
+				getRowsML(t.getRows(),columns)+"</tbody></table>" + 
+			"<div class=\"entity\" data-entity-id=\"object001\">actions</div> </messageML>";
 	}
 	
 	private String getRowsML(List<Map<String, Object>> rows, List<String> columns) {
@@ -50,27 +51,4 @@ public class TableConverter {
 		String outString = om.writeValueAsString(out);
 		return outString;
 	}
-	
-//	{
-//	    "object001":
-//	    {
-//	        "type":     "org.symphonyoss.fin.security",
-//	        "version":  "1.0",
-//	        "id":
-//	        [
-//	            {
-//	                "type":     "org.symphonyoss.fin.security.id.ticker",
-//	                "value":    "IBM"
-//	            },
-//	            {
-//	                "type":     "org.symphonyoss.fin.security.id.isin",
-//	                "value":    "US0378331005"
-//	            },
-//	            {
-//	                "type":     "org.symphonyoss.fin.security.id.cusip",
-//	                "value":    "037833100"
-//	            }
-//	        ]
-//	    }
-//	}
 }

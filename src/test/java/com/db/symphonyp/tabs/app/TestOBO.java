@@ -1,4 +1,4 @@
-package com.db.symphonyp.tabs;
+package com.db.symphonyp.tabs.app;
 
 import java.io.IOException;
 
@@ -10,13 +10,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.db.symphonyp.tabs.SymphonyTabsApp;
 import com.db.symphonyp.tabs.app.TableController;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes={SymphonyTabsApp.class})
 @TestPropertySource(properties = { 
 		"settings.file=file:target/test-settings.json"})
 public class TestOBO {

@@ -22,8 +22,10 @@ public class StartupListener {
     private final IMListenerImpl imListenerImpl;
     private final RoomListenerImpl roomListenerImpl;
     private final BotBrain botBrain75Controller;
+    private final ElementsListenerImpl elementsListenerImpl;
 
-    public StartupListener(IMListenerImpl imListenerImpl, RoomListenerImpl roomListenerImpl, BotBrain botBrain75Controller, BotBrain botBrain76Controller) {
+    public StartupListener(IMListenerImpl imListenerImpl, RoomListenerImpl roomListenerImpl, BotBrain botBrain75Controller, ElementsListenerImpl elementsListenerImpl) {
+        this.elementsListenerImpl = elementsListenerImpl;
         this.botClient75 = SymBotClient.initBotRsa("config75.json");
         this.imListenerImpl = imListenerImpl;
         this.roomListenerImpl = roomListenerImpl;
@@ -39,7 +41,9 @@ public class StartupListener {
 
         // Link datafeed listeners
         ((SymBotClient) botClient75).getDatafeedEventsService().addListeners(
-                imListenerImpl.withBrain(botBrain75Controller), roomListenerImpl.withBrain(botBrain75Controller)
+                imListenerImpl.withBrain(botBrain75Controller),
+                roomListenerImpl.withBrain(botBrain75Controller),
+                elementsListenerImpl.with(botClient75)
         );
     }
 }
