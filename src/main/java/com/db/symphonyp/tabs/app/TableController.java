@@ -52,11 +52,10 @@ public class TableController implements InitializingBean {
 	@Autowired
 	TableConverter c;
 	
-	
-	
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT}, path="/table/{streamId}", consumes = "application/json" )
 	@ResponseBody
 	public boolean postTable(@RequestBody Table table, @RequestHeader(name="Authorization") String jwt, @PathVariable("streamId") String streamId) throws JsonParseException, JsonMappingException, IOException {
+		LOG.info("Started postTable");
 		if (table == null) {
 			table = getDefaultTable();
 		}

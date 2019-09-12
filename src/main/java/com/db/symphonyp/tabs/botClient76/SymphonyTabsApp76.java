@@ -1,4 +1,4 @@
-package com.db.symphonyp.tabs;
+package com.db.symphonyp.tabs.botClient76;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
