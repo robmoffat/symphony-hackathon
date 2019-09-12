@@ -14,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import utils.FormBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import javax.ws.rs.core.NoContentException;
+import java.util.*;
 
 @Controller
 public class BotBrain75Controller implements BotBrain {
@@ -38,8 +36,26 @@ public class BotBrain75Controller implements BotBrain {
         String input = (String) formValues.get("tableName");
         String messageOut;
         switch (action.getFormId()) {
+            case "approvals-table-form":
+                Map<String, String> approvals = new LinkedHashMap<>();
+                List<Long> assignedTo = (List) formValues.get("assignedTo");
+                for (Long aLong : assignedTo) {
+                    try {
+                        UserInfo userFromId = bot.getUsersClient().getUserFromId(aLong, true);
+                        String userIMStreamId = bot.getStreamsClient().getUserIMStreamId(aLong);
+                        String username = userFromId.getUsername();
+                        approvals.put(aLong.toString(), username);
+                        bot.getMessagesClient().sendMessage(userIMStreamId, new OutboundMessage("You have a table pending to sign off"));
+                    } catch (NoContentException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                lastTable.setApprovals(approvals);
+                bot.getMessagesClient().sendTaggedMessage(action.getStreamId(), new OutboundMessage(tc.getMessageML(lastTable), tc.getJson(lastTable)));
+                break;
             case "signoff-table-form":
-                messageOut = String.format("Hi %s! You signed off table: %s", initiator.getFirstName(), input);
+                messageOut = String.format("Hi %s! You signed off table", initiator.getFirstName());
                 bot.getMessagesClient().sendMessage(action.getStreamId(), new OutboundMessage(messageOut));
                 break;
             case "create-table-form":
@@ -97,10 +113,8 @@ public class BotBrain75Controller implements BotBrain {
             //renderSelectTable(message, table);
         } else if (message.getMessageText().toLowerCase().startsWith("create")) {
             renderCreateTableForm(message);
-
         } else if (message.getMessageText().toLowerCase().startsWith("approve")) {
             renderConfirmationTableForm(message);
-
         } else {
 
             Properties props = new Properties();
