@@ -46,7 +46,7 @@ public class TableController implements InitializingBean {
 	@Autowired
 	TableConverter c;
 	
-	@PostMapping(path="/table/{streamId}")
+	//@PostMapping(path="/table/{streamId}")
 	public void postTable(@RequestBody Table table, @RequestHeader(name="Authorization") String jwt, @PathVariable("streamId") String streamId) throws JsonParseException, JsonMappingException, IOException {
 		if (table == null) {
 			table = getDefaultTable();

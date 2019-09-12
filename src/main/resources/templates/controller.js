@@ -32,10 +32,21 @@ SYMPHONY.remote.hello()
    const modulesService = inModules['modules'];
    const navService = inModules['applications-nav'];
    const entityService = inModules["entity"];
+   const uiservice = inModules['ui'];
     
    entityService.registerRenderer('com.db.symphonyp.tabs', {}, outServiceName)
 
    navService.add(id+"-nav", appName, outService.name);
+   
+   uiservice.registerExtension(
+	"single-user-im",
+	"hello-im",
+	outServiceName,
+	{
+		label: "Create table",
+		data: {"datetime": Date()}
+	}
+   );
 
    outService.implement({
      select: function(e) {
@@ -47,6 +58,9 @@ SYMPHONY.remote.hello()
           baseUrl+"/app.html",
           {canFloat: true});
        }
+     },
+     trigger: function(uiClass, id, payload, data) {
+    	 console.log("Create table button pressed");
      }
    })
 
