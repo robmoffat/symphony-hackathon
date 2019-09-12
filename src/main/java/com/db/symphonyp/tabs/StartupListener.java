@@ -15,19 +15,19 @@ public class StartupListener {
     private String infoStreamId;
 
     private final SymBotClient botClient75;
-    private final SymBotClient botClient77;
+    private final SymBotClient botClient76;
     private final IMListenerImpl imListenerImpl;
     private final RoomListenerImpl roomListenerImpl;
     private final BotBrain botBrain75Controller;
-    private final BotBrain botBrain77Controller;
+    private final BotBrain botBrain76Controller;
 
-    public StartupListener(SymBotClient botClient75, SymBotClient botClient77, IMListenerImpl imListenerImpl, RoomListenerImpl roomListenerImpl, BotBrain botBrain75Controller, BotBrain botBrain77Controller) {
+    public StartupListener(SymBotClient botClient75, SymBotClient botClient76, IMListenerImpl imListenerImpl, RoomListenerImpl roomListenerImpl, BotBrain botBrain75Controller, BotBrain botBrain76Controller) {
         this.botClient75 = botClient75;
-        this.botClient77 = botClient77;
+        this.botClient76 = botClient76;
         this.imListenerImpl = imListenerImpl;
         this.roomListenerImpl = roomListenerImpl;
         this.botBrain75Controller = botBrain75Controller;
-        this.botBrain77Controller = botBrain77Controller;
+        this.botBrain76Controller = botBrain76Controller;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -37,7 +37,7 @@ public class StartupListener {
             botClient75.getMessagesClient().sendMessage(infoStreamId, mes);
 
             mes = new OutboundMessage("Started Bonds Bot");
-            botClient77.getMessagesClient().sendMessage(infoStreamId, mes);
+            botClient76.getMessagesClient().sendMessage(infoStreamId, mes);
         }
 
         // Link datafeed listeners
@@ -46,8 +46,8 @@ public class StartupListener {
         );
 
         // Link datafeed listeners
-        botClient77.getDatafeedEventsService().addListeners(
-                imListenerImpl.withBrain(botBrain77Controller), roomListenerImpl.withBrain(botBrain77Controller)
+        botClient76.getDatafeedEventsService().addListeners(
+                imListenerImpl.withBrain(botBrain76Controller), roomListenerImpl.withBrain(botBrain76Controller)
         );
     }
 }
