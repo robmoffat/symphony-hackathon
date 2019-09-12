@@ -2,6 +2,7 @@ package com.db.symphonyp.tabs.common;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -25,14 +26,24 @@ public class TableConverter {
 	}
 	
 	private String getRowsML(List<Map<String, Object>> rows, List<String> columns) {
-		return "<tr>"+rows.stream().map(r -> getRowML(r, columns)).reduce("", (a,b) -> a+b)+"</tr>";
+		return rows.stream().map(r -> getRowML(r, columns)).reduce("", (a,b) -> a+b);
+		
+//		Iterator i = rows.listIterator();
+//		
+//		String all =  "":
+//			
+//		while (i.hasNext())
+//		{
+//			String r = getRowML((Map<String, Object>) i.next(), columns);
+//			all += r;
+//		}
 	}
 
 	private String getRowML(Map<String, Object> r, List<String> columns) {
-		return columns.stream()
+		return "<tr>" + columns.stream()
 			.map(c -> r.getOrDefault(c, ""))
 			.map(v -> "<td>"+v+"</td>")
-			.reduce("", (a,b) -> a+b);
+			.reduce("", (a,b) -> a+b) + "</tr>";
 	}
 
 	private String getColumnML(List<String> columns) {
