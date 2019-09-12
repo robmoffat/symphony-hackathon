@@ -1,7 +1,6 @@
 package com.db.symphonyp.tabs.botClient76;
 
 import clients.ISymClient;
-import main.java.com.db.symphony.tradegate.Bond;
 
 import com.db.symphonyp.tabs.BotBrain;
 import com.fasterxml.jackson.databind.MappingIterator;
@@ -18,11 +17,15 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class BotBrain76Controller implements BotBrain {
 
+	private static final Logger LOG = LoggerFactory.getLogger(BotBrain76Controller.class);
+	
     private ISymClient bot;
 
     private Pattern patGiveMe;
@@ -39,11 +42,27 @@ public class BotBrain76Controller implements BotBrain {
         }
         
         String messageText = message.getMessageText();
+        
+        if (messageText == null | messageText.isEmpty())
+        	return;
+        
         Matcher matGiveMe = patGiveMe.matcher(messageText);
         
         if (matGiveMe.find())
         {
         	System.out.println("76 in>" + matGiveMe.group(1));
+        	
+        	String isin = matGiveMe.group(1);
+        	
+        	if (data.containsKey(isin))
+        	{
+        		Bond bond = data.get(isin);
+        		LOG.info("bond " + isin + " exists; " + bond.price);
+        	}
+        	else
+        	{
+        		LOG.info("bond " + isin + " is unknown");
+        	}
         }
         
                 //this.bot.getMessagesClient().sendMessage(streamId, new OutboundMessage(messageOut));
@@ -70,11 +89,20 @@ public class BotBrain76Controller implements BotBrain {
 		csv.enable(CsvParser.Feature.WRAP_AS_ARRAY);
 		CsvSchema schema = CsvSchema.emptySchema().withHeader().withColumnSeparator(',');
 		
-		Reader reader = new FileReader("resources/static/bonds/bonds.csv");
+		Reader reader;
+		MappingIterator<Bond> mi = null;
 		
-		ObjectReader oReader = csv.reader(Bond.class).with(schema);
-		
-		MappingIterator<Bond> mi = oReader.readValues(reader);
+		try {
+		    reader = new FileReader("src/main/resources/static/bonds/bonds.csv");
+			
+			ObjectReader oReader = csv.reader(Bond.class).with(schema);
+			
+			mi = oReader.readValues(reader);
+		}
+		catch (Exception e)
+		{
+			LOG.error("Problem loading bond data file; " + e.getMessage());
+		}
 		
 		while (mi.hasNext()){
 			  Bond row = mi.next();
