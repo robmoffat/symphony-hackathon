@@ -43,7 +43,7 @@ public class StartupListener {
         ((SymBotClient) botClient75).getDatafeedEventsService().addListeners(
                 imListenerImpl.withBrain(botBrain75Controller),
                 roomListenerImpl.withBrain(botBrain75Controller),
-                elementsListenerImpl.with(botClient75)
+                elementsListenerImpl.with(botBrain75Controller)
         );
     }
 }
