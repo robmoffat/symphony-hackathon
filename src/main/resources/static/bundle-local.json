@@ -2,7 +2,7 @@
   "applications": [
     {
       "type": "sandbox",
-      "id": "symphony-tabs-2",
+      "id": "symphony-tabs-local",
       "name": "Symphony Tabs Local",
       "description": "Table Support For Symphony",
       "publisher": "Deutsche Bank",

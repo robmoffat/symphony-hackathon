@@ -1,4 +1,6 @@
-var viewName = 'symphony-tabs:view'
+const dev = /*[[${dev}]]*/ false;
+const id = 'symphony-tabs' + (dev ? '-local' : '')
+var viewName = id+ ':view'
 var baseUrl = /*[[${baseUrl}]]*/ 'https://localhost:4000';
 
 //SYMPHONY.remote.hello().then(function (data) {

@@ -1,4 +1,5 @@
-const id = 'symphony-tabs'
+const dev = /*[[${dev}]]*/ false;
+const id = 'symphony-tabs' + (dev ? '-local' : '')
 const outServiceName = id +':controller';
 const outService = SYMPHONY.services.register(outServiceName)
 const appName = 'Symphony Tabs';
@@ -55,12 +56,20 @@ SYMPHONY.remote.hello()
           id+"-app-panel", 
           {title: 'Some Module'}, 
           outService.name, 
-          baseUrl+"/app.html",
+          baseUrl+"/app.html?dev="+dev,
           {canFloat: true});
        }
      },
      trigger: function(uiClass, id, payload, data) {
     	 console.log("Create table button pressed");
+     },
+     render: function(type, data) {
+	    if (type == "com.db.symphonyp.tabs") {
+	      return {
+	        template: '<entity><iframe src="'+baseUrl+'/buttons.html" /></entity>',
+	        data: {}
+	      };
+	    }
      }
    })
 

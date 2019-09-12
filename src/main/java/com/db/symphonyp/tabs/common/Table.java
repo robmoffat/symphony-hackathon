@@ -1,4 +1,4 @@
-package com.db.symphonyp.tabs;
+package com.db.symphonyp.tabs.common;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;

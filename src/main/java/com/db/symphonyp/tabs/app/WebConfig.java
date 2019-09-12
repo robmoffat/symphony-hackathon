@@ -1,4 +1,4 @@
-package com.db.symphonyp.tabs.config;
+package com.db.symphonyp.tabs.app;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
